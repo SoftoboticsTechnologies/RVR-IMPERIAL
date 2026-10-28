@@ -264,7 +264,7 @@ strong { font-weight: 600; color: inherit; }
 }
 .btn:hover::after, .btn:focus-visible::after { left: 130%; }
 
-.btn--gold { background: var(--gold-gradient); background-size: 140% 140%; color: var(--navy-950); box-shadow: 0 6px 18px -8px rgba(143,101,23,.7); }
+.btn--gold { background: var(--gold-gradient) border-box no-repeat; background-size: 140% 140%; color: var(--navy-950); box-shadow: 0 6px 18px -8px rgba(143,101,23,.7); }
 .btn--gold:hover, .btn--gold:focus-visible { color: var(--navy-950); box-shadow: var(--shadow-gold); }
 .btn--navy { background: var(--navy-700); color: var(--white); }
 .btn--navy:hover { background: var(--navy-900); color: var(--gold-200); }
@@ -477,6 +477,15 @@ strong { font-weight: 600; color: inherit; }
 }
 .tabs__btn[aria-selected="true"] { background: var(--navy-700); color: var(--gold-200); box-shadow: 0 6px 16px -8px rgba(11,26,63,.6); }
 .tab-panel { animation: fadeIn .45s var(--ease); }
+/* Enquiry-type dropdown (built by form.js): shown on phones instead of the tabs */
+.tabs-select { margin-top: 1rem; }
+.tabs-select select { font-weight: 600; color: var(--navy-700); background-color: var(--ivory-100); border-color: rgba(201,151,43,.55); }
+@media (max-width: 767.98px) {
+  .js .tabs { display: none; }
+}
+@media (min-width: 768px) {
+  .tabs-select { display: none; }
+}
 
 /* Filter buttons */
 .filter-bar { display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; margin-bottom: 2.5rem; }

@@ -13,6 +13,25 @@
   /* ---------- Tabs (ARIA tablist) ---------- */
   $$('[role="tablist"]').forEach(function (list) {
     var tabs = $$('[role="tab"]', list);
+
+    // Phones: the same choices as a dropdown (CSS shows it below 768px and hides the tabs)
+    var picker = document.createElement('div');
+    picker.className = 'field tabs-select';
+    var pickId = (tabs[0] ? tabs[0].id : 'tab') + '-select';
+    picker.innerHTML = '<label for="' + pickId + '">Enquiry type</label><select id="' + pickId + '"></select>';
+    var select = $('select', picker);
+    tabs.forEach(function (t) {
+      var opt = document.createElement('option');
+      opt.value = t.id;
+      opt.textContent = t.textContent.trim();
+      select.appendChild(opt);
+    });
+    list.parentNode.insertBefore(picker, list);
+    select.addEventListener('change', function () {
+      var t = document.getElementById(select.value);
+      if (t) activate(t);
+    });
+
     function activate(tab, focus) {
       tabs.forEach(function (t) {
         var on = t === tab;
@@ -21,6 +40,7 @@
         var panel = document.getElementById(t.getAttribute('aria-controls'));
         if (panel) panel.hidden = !on;
       });
+      select.value = tab.id;
       if (focus) tab.focus();
     }
     tabs.forEach(function (tab, i) {
