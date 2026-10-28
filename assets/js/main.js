@@ -246,8 +246,7 @@
   });
 
   /* ---------- World map tooltips ---------- */
-  var map = $('.world-map');
-  if (map) {
+  $$('.world-map').forEach(function (map) {
     var tip = $('.map-tooltip', map);
     var svg = $('svg', map);
     function show(node) {
@@ -269,5 +268,5 @@
       n.addEventListener('mouseleave', hide);
       n.addEventListener('blur', hide);
     });
-  }
+  });
 })();
