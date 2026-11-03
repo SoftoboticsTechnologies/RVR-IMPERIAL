@@ -42,6 +42,14 @@ window.RVR_CONFIG = {
   // PHP handler (relative to site root)
   phpEndpoint: 'contact.php',
 
+  // Social profiles (header, footer and mobile menu icons). Paste the full
+  // profile URLs here; until then the icons open each platform's home page.
+  social: {
+    instagram: '',   // e.g. 'https://www.instagram.com/your-handle/'
+    facebook: '',    // e.g. 'https://www.facebook.com/your-page'
+    linkedin: ''     // e.g. 'https://www.linkedin.com/company/your-company/'
+  },
+
   successMessage: 'Thank you! Your request has been received. Our trade team will get back to you shortly.',
   errorMessage: 'Sorry, something went wrong while sending your request. Please try again, or send it via WhatsApp / e-mail instead.'
 };

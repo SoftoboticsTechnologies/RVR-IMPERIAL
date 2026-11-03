@@ -1,8 +1,8 @@
 /* ==========================================================================
    RVR IMPERIAL EXIM — main.js
-   Sticky header · mobile menu · mega-menu · scroll reveal · counters ·
-   back-to-top · FAQ accordion · product filter · footer accordion ·
-   world-map tooltips · active nav link · analytics events
+   Sticky header · mobile menu · mega-menu · scroll reveal · social links ·
+   back-to-top · FAQ accordion · product / gallery filter · footer accordion ·
+   world-map tooltips · gallery lightbox · active nav link · analytics events
    ========================================================================== */
 (function () {
   'use strict';
@@ -91,7 +91,7 @@
       if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
       else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
     });
-    window.addEventListener('resize', function () { if (window.innerWidth >= 1024) closeMenu(); });
+    window.addEventListener('resize', function () { if (window.innerWidth >= 1200) closeMenu(); });
   }
 
   // Mobile accordion sub-menus
@@ -164,31 +164,12 @@
     reveals.forEach(function (el) { el.classList.add('is-visible'); });
   }
 
-  /* ---------- Count-up (TRUE numbers only: 7, 7, 2026) ---------- */
-  function countUp(el) {
-    var target = parseInt(el.getAttribute('data-count'), 10);
-    var start = parseInt(el.getAttribute('data-count-from') || '0', 10);
-    if (isNaN(target)) return;
-    if (reduceMotion) { el.textContent = target; return; }
-    var duration = 1600, t0 = null;
-    function step(ts) {
-      if (!t0) t0 = ts;
-      var p = Math.min((ts - t0) / duration, 1);
-      var eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = Math.round(start + (target - start) * eased);
-      if (p < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }
-  var counters = $$('[data-count]');
-  if ('IntersectionObserver' in window) {
-    var co = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) { countUp(entry.target); co.unobserve(entry.target); }
-      });
-    }, { threshold: 0.5 });
-    counters.forEach(function (el) { co.observe(el); });
-  }
+  /* ---------- Social profile links (URLs live in config.js) ---------- */
+  var social = (window.RVR_CONFIG && window.RVR_CONFIG.social) || {};
+  $$('[data-social]').forEach(function (a) {
+    var url = social[a.getAttribute('data-social')];
+    if (url) a.setAttribute('href', url);
+  });
 
   /* ---------- FAQ accordion ---------- */
   $$('.faq-q').forEach(function (btn) {
@@ -269,4 +250,41 @@
       n.addEventListener('blur', hide);
     });
   });
+
+  /* ---------- Gallery lightbox ---------- */
+  var lightbox = $('#lightbox');
+  if (lightbox && typeof lightbox.showModal === 'function') {
+    var lbImg = $('.lightbox__img', lightbox);
+    var lbCap = $('.lightbox__caption', lightbox);
+    var lbIndex = 0;
+    var lbLinks = function () {
+      return $$('[data-lightbox]').filter(function (a) { return !a.closest('.is-filtered-out'); });
+    };
+    var lbShow = function (i) {
+      var links = lbLinks();
+      if (!links.length) return;
+      lbIndex = (i + links.length) % links.length;
+      var a = links[lbIndex];
+      lbImg.src = a.getAttribute('href');
+      lbImg.alt = a.getAttribute('data-caption') || '';
+      lbCap.textContent = a.getAttribute('data-caption') || '';
+    };
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('[data-lightbox]');
+      if (!a) return;
+      e.preventDefault();
+      lbShow(lbLinks().indexOf(a));
+      lightbox.showModal();
+      document.body.classList.add('is-lightbox');
+    });
+    $('[data-lightbox-prev]', lightbox).addEventListener('click', function () { lbShow(lbIndex - 1); });
+    $('[data-lightbox-next]', lightbox).addEventListener('click', function () { lbShow(lbIndex + 1); });
+    $('[data-lightbox-close]', lightbox).addEventListener('click', function () { lightbox.close(); });
+    lightbox.addEventListener('click', function (e) { if (e.target === lightbox) lightbox.close(); });
+    lightbox.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') lbShow(lbIndex - 1);
+      else if (e.key === 'ArrowRight') lbShow(lbIndex + 1);
+    });
+    lightbox.addEventListener('close', function () { document.body.classList.remove('is-lightbox'); lbImg.src = ''; });
+  }
 })();
