@@ -1137,6 +1137,9 @@ strong { font-weight: 600; color: inherit; }
 .brand-card__media { aspect-ratio: 16 / 9; overflow: hidden; background: var(--navy-900); }
 .brand-card__media img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease); }
 .brand-card:hover .brand-card__media img { transform: scale(1.06); }
+.brand-card__media--logo { background: #fff; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+.brand-card__media--logo img { width: 100%; height: 100%; object-fit: contain; }
+.brand-card:hover .brand-card__media--logo img { transform: none; }
 .brand-card__body { padding: clamp(1.5rem, 1.2rem + 1.5vw, 2.4rem); display: flex; flex-direction: column; gap: .8rem; flex: 1; }
 .brand-card__body .brand-mark { margin-top: .2rem; }
 .brand-card__body > p { color: var(--muted); }
